@@ -24,6 +24,8 @@ class JumpPadModifyListener(private val plugin: SimpleJumpPadPlugin) : Listener 
 
         e.player.sendMessage(System.currentTimeMillis().toString())
 
-//        e.player.sendMessage("${plugin.jumpPadConfig.getLocation("${loc.blockX},${loc.blockY},${loc.blockZ}.location")}")
+        val jumpPadLocation = plugin.jumpPadConfig.getLocation("${loc.blockX},${loc.blockY},${loc.blockZ}.location")!!
+
+        JumpPadEditGUI(jumpPadLocation).open(e.player)
     }
 }

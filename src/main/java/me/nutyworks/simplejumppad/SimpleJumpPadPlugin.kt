@@ -12,9 +12,16 @@ class SimpleJumpPadPlugin() : JavaPlugin() {
 
     val jumpPadConfigFile = File(dataFolder, "jump_pads.yml")
 
+    companion object {
+        lateinit var instance: SimpleJumpPadPlugin
+    }
+
     override fun onEnable() {
+        instance = this
+
         server.pluginManager.registerEvents(JumpPadAddRemoveListener(this), this)
         server.pluginManager.registerEvents(JumpPadModifyListener(this), this)
+        server.pluginManager.registerEvents(JumpPadEditGUIListener(this), this)
 
         getCommand("togglejumppad")?.setExecutor { sender, _, _, _ ->
             if (sender is Player) {
