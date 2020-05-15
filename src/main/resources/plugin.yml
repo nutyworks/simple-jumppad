@@ -1,5 +1,10 @@
 name: SimpleJumpPad
 version: @version@
 main: me.nutyworks.simplejumppad.SimpleJumpPadPlugin
-api-version: 1.13
+api-version: '1.13'
 authors: [nutyworks]
+commands:
+  togglejumppad:
+    aliases: [tjp]
+    description: Toggles jump pad place mode.
+    usage: /<command>
