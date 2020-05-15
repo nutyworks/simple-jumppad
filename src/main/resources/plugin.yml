@@ -1,0 +1,5 @@
+name: SimpleJumpPad
+version: @version@
+main: me.nutyworks.simplejumppad.SimpleJumpPadPlugin
+api-version: 1.13
+authors: [nutyworks]
