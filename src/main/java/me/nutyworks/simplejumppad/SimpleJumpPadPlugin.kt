@@ -12,7 +12,6 @@ import java.io.File
 class SimpleJumpPadPlugin() : JavaPlugin() {
     val playerJumpPadModeMap = mutableMapOf<Player, Boolean>()
     val playerJumpPadEditType = mutableMapOf<Player, Pair<Location, EditJumpPad>>()
-    val editingVector = ArrayList<Player>()
 
     lateinit var jumpPadConfig: YamlConfiguration
 
@@ -46,7 +45,7 @@ class SimpleJumpPadPlugin() : JavaPlugin() {
         loadJumpPadConfig()
 
         server.scheduler.runTaskTimer(this, { ->
-            for (player in editingVector) {
+            for (player in playerJumpPadEditType.filter { k -> k.value.second == EditJumpPad.VECTOR }.keys) {
                 val padLocation = playerJumpPadEditType[player]!!.first.clone().add(0.5, 0.0, 0.5)
                 val targetLocation = player.eyeLocation.clone().add(player.location.direction.multiply(2))
 
