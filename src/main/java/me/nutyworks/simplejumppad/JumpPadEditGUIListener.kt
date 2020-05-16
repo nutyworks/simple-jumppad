@@ -52,7 +52,6 @@ class JumpPadEditGUIListener(private val plugin: SimpleJumpPadPlugin) : Listener
                         e.whoClicked.closeInventory()
                         e.whoClicked.sendMessage("${ChatColor.GREEN}Vector (left-click to apply, right-click to cancel)")
                         plugin.playerJumpPadEditType[e.whoClicked as Player] = Pair(realLoc, EditJumpPad.VECTOR)
-                        plugin.editingVector.add(e.whoClicked as Player)
                     }
                 }
             }

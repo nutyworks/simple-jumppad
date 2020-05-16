@@ -34,7 +34,7 @@ class JumpPadModifyListener(private val plugin: SimpleJumpPadPlugin) : Listener 
 
     @EventHandler
     fun onJumpPadVectorModify(e: PlayerInteractEvent) {
-        if (e.player !in plugin.editingVector) return
+        if (e.player !in plugin.playerJumpPadEditType.filter { k -> k.value.second == EditJumpPad.VECTOR }.keys) return
         if (e.action !in setOf(Action.RIGHT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR, Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK)) return
         if (e.hand == EquipmentSlot.OFF_HAND) return
 
@@ -67,7 +67,6 @@ class JumpPadModifyListener(private val plugin: SimpleJumpPadPlugin) : Listener 
         }
 
         plugin.playerJumpPadEditType.remove(e.player)
-        plugin.editingVector.remove(e.player)
 
         e.isCancelled = true
 
