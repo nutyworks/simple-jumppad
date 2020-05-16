@@ -1,5 +1,6 @@
 package me.nutyworks.simplejumppad
 
+import org.bukkit.Sound
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
 import org.bukkit.event.block.Action
@@ -32,5 +33,7 @@ class JumpPadUseListener(private val plugin: SimpleJumpPadPlugin) : Listener {
                 e.player.velocity = jumpPadVector
             }
         }
+
+        e.player.playSound(e.player.location, Sound.ENTITY_FIREWORK_ROCKET_LAUNCH, 1f, 1f)
     }
 }

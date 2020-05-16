@@ -27,6 +27,7 @@ class JumpPadModifyListener(private val plugin: SimpleJumpPadPlugin) : Listener 
         if (!e.player.isOp) return
 
         JumpPadEditGUI(loc).open(e.player)
+        e.player.playSound(e.player.location, Sound.ITEM_ARMOR_EQUIP_LEATHER, 1f, 1f)
 
         e.isCancelled = true
     }
@@ -48,6 +49,8 @@ class JumpPadModifyListener(private val plugin: SimpleJumpPadPlugin) : Listener 
 
                 plugin.jumpPadConfig.set("${loc.blockX},${loc.blockY},${loc.blockZ}.vector", changedVector)
                 plugin.jumpPadConfig.save(plugin.jumpPadConfigFile)
+
+                e.player.playSound(e.player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
 
                 plugin.server.scheduler.runTaskLater(plugin, { ->
                     JumpPadEditGUI(loc).open(e.player)
@@ -92,6 +95,7 @@ class JumpPadModifyListener(private val plugin: SimpleJumpPadPlugin) : Listener 
 
         plugin.server.scheduler.runTaskLater(plugin, { ->
             JumpPadEditGUI(loc).open(e.player)
+            e.player.playSound(e.player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
         }, 1)
 
         e.isCancelled = true

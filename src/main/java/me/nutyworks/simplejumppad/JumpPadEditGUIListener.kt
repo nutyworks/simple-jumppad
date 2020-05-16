@@ -2,6 +2,7 @@ package me.nutyworks.simplejumppad
 
 import org.bukkit.ChatColor
 import org.bukkit.Location
+import org.bukkit.Sound
 import org.bukkit.entity.Player
 import org.bukkit.event.EventHandler
 import org.bukkit.event.Listener
@@ -57,8 +58,10 @@ class JumpPadEditGUIListener(private val plugin: SimpleJumpPadPlugin) : Listener
             }
         }
 
-        if (e.slot == 2)
+        if (e.slot == 2) {
             JumpPadEditGUI(realLoc).open(e.whoClicked as Player)
+            (e.whoClicked as Player).playSound(e.whoClicked.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
+        }
 
         e.isCancelled = true
     }
