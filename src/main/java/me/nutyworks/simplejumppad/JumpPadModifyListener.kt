@@ -1,5 +1,6 @@
 package me.nutyworks.simplejumppad
 
+import me.nutyworks.simplejumppad.EditJumpPad.*
 import org.bukkit.ChatColor
 import org.bukkit.Sound
 import org.bukkit.event.EventHandler
@@ -34,7 +35,7 @@ class JumpPadModifyListener(private val plugin: SimpleJumpPadPlugin) : Listener 
 
     @EventHandler
     fun onJumpPadVectorModify(e: PlayerInteractEvent) {
-        if (e.player !in plugin.playerJumpPadEditType.filter { k -> k.value.second == EditJumpPad.VECTOR }.keys) return
+        if (e.player !in plugin.playerJumpPadEditType.filter { k -> k.value.second == VECTOR_ALL }.keys) return
         if (e.action !in setOf(Action.RIGHT_CLICK_BLOCK, Action.RIGHT_CLICK_AIR, Action.LEFT_CLICK_AIR, Action.LEFT_CLICK_BLOCK)) return
         if (e.hand == EquipmentSlot.OFF_HAND) return
 
@@ -76,15 +77,27 @@ class JumpPadModifyListener(private val plugin: SimpleJumpPadPlugin) : Listener 
     @EventHandler
     fun onJumpPadValueChat(e: AsyncPlayerChatEvent) {
         val editType = plugin.playerJumpPadEditType[e.player] ?: return
-        if (editType.second !in setOf(EditJumpPad.FACING_HORIZONTAL, EditJumpPad.FACING_VERTICAL)) return
+        if (editType.second !in setOf(FACING_HORIZONTAL, FACING_VERTICAL, VECTOR_X, VECTOR_Y, VECTOR_Z)) return
+
+        e.isCancelled = true
 
         val value = e.message.toDoubleOrNull() ?: return e.player.sendMessage("${ChatColor.RED}'${e.message}' is not a number.")
 
         val loc = editType.first
 
         val changedVector = plugin.jumpPadConfig.getVector("${loc.blockX},${loc.blockY},${loc.blockZ}.vector")!!.apply {
-            if (editType.second == EditJumpPad.FACING_HORIZONTAL) x = value
-            else if (editType.second == EditJumpPad.FACING_VERTICAL) y = value
+            when (editType.second) {
+                FACING_HORIZONTAL, VECTOR_X -> {
+                    x = value
+                }
+                FACING_VERTICAL, VECTOR_Y -> {
+                    y = value
+                }
+                VECTOR_Z -> {
+                    z = value
+                }
+                else -> e.player.sendMessage("How did you get here?")
+            }
         }
 
         plugin.jumpPadConfig.set("${loc.blockX},${loc.blockY},${loc.blockZ}.vector", changedVector)
@@ -96,7 +109,5 @@ class JumpPadModifyListener(private val plugin: SimpleJumpPadPlugin) : Listener 
             JumpPadEditGUI(loc).open(e.player)
             e.player.playSound(e.player.location, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1f, 1f)
         }, 1)
-
-        e.isCancelled = true
     }
 }

@@ -21,12 +21,13 @@ class JumpPadEditGUI(val loc: Location) {
                         lore = mutableListOf("${ChatColor.GRAY}Click to change to facing.")
                     }
                 })
+                for (i in 3..5)
+                    inv.setItem(i, ItemStack(Material.AIR))
                 inv.setItem(6, ItemStack(Material.BARRIER).apply {
                     itemMeta = itemMeta?.apply {
                         setDisplayName(" ")
                     }
                 })
-                SimpleJumpPadPlugin.instance.jumpPadConfig.set("${loc.blockX},${loc.blockY},${loc.blockZ}.mode", "disabled")
             }
             "facing" -> {
                 inv.setItem(2, ItemStack(Material.PLAYER_HEAD).apply {
@@ -51,24 +52,40 @@ class JumpPadEditGUI(val loc: Location) {
                         lore = mutableListOf("${ChatColor.GRAY}Value: $vt")
                     }
                 })
-                SimpleJumpPadPlugin.instance.jumpPadConfig.set("${loc.blockX},${loc.blockY},${loc.blockZ}.mode", "facing")
             }
             "vector" -> {
+                val vc = SimpleJumpPadPlugin.instance.jumpPadConfig.getVector("${loc.blockX},${loc.blockY},${loc.blockZ}.vector")!!
+
                 inv.setItem(2, ItemStack(Material.ARROW).apply {
                     itemMeta = itemMeta?.apply {
                         setDisplayName("${ChatColor.GREEN}Vector")
                         lore = mutableListOf("${ChatColor.GRAY}Click to change to disabled.")
                     }
                 })
+                inv.setItem(3, ItemStack(Material.ORANGE_DYE).apply {
+                    itemMeta = itemMeta?.apply {
+                        setDisplayName("${ChatColor.GREEN}Set X")
+                        lore = mutableListOf("${ChatColor.GRAY}Value: ${vc.x}")
+                    }
+                })
+                inv.setItem(4, ItemStack(Material.ORANGE_DYE).apply {
+                    itemMeta = itemMeta?.apply {
+                        setDisplayName("${ChatColor.GREEN}Set Y")
+                        lore = mutableListOf("${ChatColor.GRAY}Value: ${vc.y}")
+                    }
+                })
+                inv.setItem(5, ItemStack(Material.ORANGE_DYE).apply {
+                    itemMeta = itemMeta?.apply {
+                        setDisplayName("${ChatColor.GREEN}Set Z")
+                        lore = mutableListOf("${ChatColor.GRAY}Value: ${vc.z}")
+                    }
+                })
                 inv.setItem(6, ItemStack(Material.LIME_DYE).apply {
                     itemMeta = itemMeta?.apply {
                         setDisplayName("${ChatColor.GREEN}Set vector")
-
-                        val vc = SimpleJumpPadPlugin.instance.jumpPadConfig.getVector("${loc.blockX},${loc.blockY},${loc.blockZ}.vector")!!
                         lore = mutableListOf("${ChatColor.GRAY}Value: (%.2f, %.2f, %.2f)".format(vc.x, vc.y, vc.z))
                     }
                 })
-                SimpleJumpPadPlugin.instance.jumpPadConfig.set("${loc.blockX},${loc.blockY},${loc.blockZ}.mode", "vector")
             }
         }
         player.openInventory(inv)
