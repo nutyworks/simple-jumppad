@@ -20,38 +20,59 @@ class JumpPadEditGUIListener(private val plugin: SimpleJumpPadPlugin) : Listener
         val realLoc = Location(e.whoClicked.world, locSplit[0].toDouble(), locSplit[1].toDouble(), locSplit[2].toDouble())
 
         if (e.clickedInventory?.holder == null) {
-            when (e.slot) {
-                2 -> when (jumpPadMode) {
-                    "disabled" -> {
-                        plugin.jumpPadConfig.set("$loc.mode", "facing")
-                        plugin.jumpPadConfig.save(plugin.jumpPadConfigFile)
-                    }
-                    "facing" -> {
-                        plugin.jumpPadConfig.set("$loc.mode", "vector")
-                        plugin.jumpPadConfig.save(plugin.jumpPadConfigFile)
-                    }
-                    "vector" -> {
-                        plugin.jumpPadConfig.set("$loc.mode", "disabled")
-                        plugin.jumpPadConfig.save(plugin.jumpPadConfigFile)
+            when (jumpPadMode) {
+                "disabled" -> {
+                    when (e.slot) {
+                        2 -> {
+                            plugin.jumpPadConfig.set("$loc.mode", "facing")
+                            plugin.jumpPadConfig.save(plugin.jumpPadConfigFile)
+                        }
                     }
                 }
-                4 -> when (jumpPadMode) {
-                    "facing" -> {
-                        e.whoClicked.closeInventory()
-                        e.whoClicked.sendMessage("${ChatColor.GREEN}Horizontal velocity (type in chat)")
-                        plugin.playerJumpPadEditType[e.whoClicked as Player] = Pair(realLoc, EditJumpPad.FACING_HORIZONTAL)
+                "facing" -> {
+                    when (e.slot) {
+                        2 -> {
+                            plugin.jumpPadConfig.set("$loc.mode", "vector")
+                            plugin.jumpPadConfig.save(plugin.jumpPadConfigFile)
+                        }
+                        4 -> {
+                            e.whoClicked.closeInventory()
+                            e.whoClicked.sendMessage("${ChatColor.GREEN}Horizontal velocity (type in chat)")
+                            plugin.playerJumpPadEditType[e.whoClicked as Player] = Pair(realLoc, EditJumpPad.FACING_HORIZONTAL)
+                        }
+                        6 -> {
+                            e.whoClicked.closeInventory()
+                            e.whoClicked.sendMessage("${ChatColor.GREEN}Vertical velocity (type in chat)")
+                            plugin.playerJumpPadEditType[e.whoClicked as Player] = Pair(realLoc, EditJumpPad.FACING_VERTICAL)
+                        }
                     }
                 }
-                6 -> when (jumpPadMode) {
-                    "facing" -> {
-                        e.whoClicked.closeInventory()
-                        e.whoClicked.sendMessage("${ChatColor.GREEN}Vertical velocity (type in chat)")
-                        plugin.playerJumpPadEditType[e.whoClicked as Player] = Pair(realLoc, EditJumpPad.FACING_VERTICAL)
-                    }
-                    "vector" -> {
-                        e.whoClicked.closeInventory()
-                        e.whoClicked.sendMessage("${ChatColor.GREEN}Vector (left-click to apply, right-click to cancel)")
-                        plugin.playerJumpPadEditType[e.whoClicked as Player] = Pair(realLoc, EditJumpPad.VECTOR)
+                "vector" -> {
+                    when (e.slot) {
+                        2 -> {
+                            plugin.jumpPadConfig.set("$loc.mode", "disabled")
+                            plugin.jumpPadConfig.save(plugin.jumpPadConfigFile)
+                        }
+                        3 -> {
+                            e.whoClicked.closeInventory()
+                            e.whoClicked.sendMessage("${ChatColor.GREEN}Vector X (type in chat)")
+                            plugin.playerJumpPadEditType[e.whoClicked as Player] = Pair(realLoc, EditJumpPad.VECTOR_X)
+                        }
+                        4 -> {
+                            e.whoClicked.closeInventory()
+                            e.whoClicked.sendMessage("${ChatColor.GREEN}Vector Y (type in chat)")
+                            plugin.playerJumpPadEditType[e.whoClicked as Player] = Pair(realLoc, EditJumpPad.VECTOR_Y)
+                        }
+                        5 -> {
+                            e.whoClicked.closeInventory()
+                            e.whoClicked.sendMessage("${ChatColor.GREEN}Vector Z (type in chat)")
+                            plugin.playerJumpPadEditType[e.whoClicked as Player] = Pair(realLoc, EditJumpPad.VECTOR_Z)
+                        }
+                        6 -> {
+                            e.whoClicked.closeInventory()
+                            e.whoClicked.sendMessage("${ChatColor.GREEN}Vector (left-click to apply, right-click to cancel)")
+                            plugin.playerJumpPadEditType[e.whoClicked as Player] = Pair(realLoc, EditJumpPad.VECTOR_ALL)
+                        }
                     }
                 }
             }
@@ -67,5 +88,5 @@ class JumpPadEditGUIListener(private val plugin: SimpleJumpPadPlugin) : Listener
 }
 
 enum class EditJumpPad {
-    NONE, FACING_HORIZONTAL, FACING_VERTICAL, VECTOR
+    NONE, FACING_HORIZONTAL, FACING_VERTICAL, VECTOR_ALL, VECTOR_X, VECTOR_Y, VECTOR_Z
 }

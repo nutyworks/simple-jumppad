@@ -45,7 +45,7 @@ class SimpleJumpPadPlugin() : JavaPlugin() {
         loadJumpPadConfig()
 
         server.scheduler.runTaskTimer(this, { ->
-            for (player in playerJumpPadEditType.filter { k -> k.value.second == EditJumpPad.VECTOR }.keys) {
+            for (player in playerJumpPadEditType.filter { k -> k.value.second == EditJumpPad.VECTOR_ALL }.keys) {
                 val padLocation = playerJumpPadEditType[player]!!.first.clone().add(0.5, 0.0, 0.5)
                 val targetLocation = player.eyeLocation.clone().add(player.location.direction.multiply(2))
 
