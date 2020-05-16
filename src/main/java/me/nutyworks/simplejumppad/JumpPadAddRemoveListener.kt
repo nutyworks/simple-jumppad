@@ -15,7 +15,6 @@ class JumpPadAddRemoveListener(private val plugin: SimpleJumpPadPlugin) : Listen
 
         val loc = e.block.location
 
-        plugin.jumpPadConfig.set("${loc.blockX},${loc.blockY},${loc.blockZ}.location", loc)
         plugin.jumpPadConfig.set("${loc.blockX},${loc.blockY},${loc.blockZ}.mode", "facing")
         plugin.jumpPadConfig.set("${loc.blockX},${loc.blockY},${loc.blockZ}.vector", Vector(1, 1, 0))
         plugin.jumpPadConfig.save(plugin.jumpPadConfigFile)

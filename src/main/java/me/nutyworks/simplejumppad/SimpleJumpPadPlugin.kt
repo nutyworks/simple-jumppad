@@ -1,6 +1,9 @@
 package me.nutyworks.simplejumppad
 
 import org.bukkit.ChatColor
+import org.bukkit.Color
+import org.bukkit.Location
+import org.bukkit.Particle
 import org.bukkit.configuration.file.YamlConfiguration
 import org.bukkit.entity.Player
 import org.bukkit.plugin.java.JavaPlugin
@@ -8,6 +11,9 @@ import java.io.File
 
 class SimpleJumpPadPlugin() : JavaPlugin() {
     val playerJumpPadModeMap = mutableMapOf<Player, Boolean>()
+    val playerJumpPadEditType = mutableMapOf<Player, Pair<Location, EditJumpPad>>()
+    val editingVector = ArrayList<Player>()
+
     lateinit var jumpPadConfig: YamlConfiguration
 
     val jumpPadConfigFile = File(dataFolder, "jump_pads.yml")
@@ -22,6 +28,7 @@ class SimpleJumpPadPlugin() : JavaPlugin() {
         server.pluginManager.registerEvents(JumpPadAddRemoveListener(this), this)
         server.pluginManager.registerEvents(JumpPadModifyListener(this), this)
         server.pluginManager.registerEvents(JumpPadEditGUIListener(this), this)
+        server.pluginManager.registerEvents(JumpPadUseListener(this), this)
 
         getCommand("togglejumppad")?.setExecutor { sender, _, _, _ ->
             if (sender is Player) {
@@ -37,8 +44,27 @@ class SimpleJumpPadPlugin() : JavaPlugin() {
         }
 
         loadJumpPadConfig()
+
+        server.scheduler.runTaskTimer(this, { ->
+            for (player in editingVector) {
+                val padLocation = playerJumpPadEditType[player]!!.first.clone().add(0.5, 0.0, 0.5)
+                val targetLocation = player.eyeLocation.clone().add(player.location.direction.multiply(2))
+
+                val distance = padLocation.distance(targetLocation).toInt()
+
+                for (i in 0..distance) {
+                    val particleLocation= padLocation.clone().add(targetLocation.clone().subtract(padLocation).toVector().normalize().multiply(i).toLocation(player.world))
+                    player.spawnParticle(
+                            Particle.REDSTONE, particleLocation, 1,
+                            Particle.DustOptions(Color.fromBGR(0, 255, 0), 1f))
+                }
+
+            }
+        }, 0, 20)
     }
-    override fun onLoad() {
+
+    override fun onDisable() {
+        jumpPadConfig.save(jumpPadConfigFile)
     }
 
     private fun loadJumpPadConfig() {

@@ -35,9 +35,20 @@ class JumpPadEditGUI(val loc: Location) {
                         lore = mutableListOf("${ChatColor.GRAY}Click to change to vector.")
                     }
                 })
-                inv.setItem(6, ItemStack(Material.BARRIER).apply {
+                inv.setItem(4, ItemStack(Material.LIME_DYE).apply {
                     itemMeta = itemMeta?.apply {
-                        setDisplayName(" ")
+                        setDisplayName("${ChatColor.GREEN}Set horizontal")
+
+                        val hr = SimpleJumpPadPlugin.instance.jumpPadConfig.getVector("${loc.blockX},${loc.blockY},${loc.blockZ}.vector")!!.x
+                        lore = mutableListOf("${ChatColor.GRAY}Value: $hr")
+                    }
+                })
+                inv.setItem(6, ItemStack(Material.LIME_DYE).apply {
+                    itemMeta = itemMeta?.apply {
+                        setDisplayName("${ChatColor.GREEN}Set vertical")
+
+                        val vt = SimpleJumpPadPlugin.instance.jumpPadConfig.getVector("${loc.blockX},${loc.blockY},${loc.blockZ}.vector")!!.y
+                        lore = mutableListOf("${ChatColor.GRAY}Value: $vt")
                     }
                 })
                 SimpleJumpPadPlugin.instance.jumpPadConfig.set("${loc.blockX},${loc.blockY},${loc.blockZ}.mode", "facing")
@@ -52,6 +63,9 @@ class JumpPadEditGUI(val loc: Location) {
                 inv.setItem(6, ItemStack(Material.LIME_DYE).apply {
                     itemMeta = itemMeta?.apply {
                         setDisplayName("${ChatColor.GREEN}Set vector")
+
+                        val vc = SimpleJumpPadPlugin.instance.jumpPadConfig.getVector("${loc.blockX},${loc.blockY},${loc.blockZ}.vector")!!
+                        lore = mutableListOf("${ChatColor.GRAY}Value: (%.2f, %.2f, %.2f)".format(vc.x, vc.y, vc.z))
                     }
                 })
                 SimpleJumpPadPlugin.instance.jumpPadConfig.set("${loc.blockX},${loc.blockY},${loc.blockZ}.mode", "vector")
