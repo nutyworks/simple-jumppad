@@ -31,7 +31,7 @@ class SimpleJumpPadPlugin() : JavaPlugin() {
         server.pluginManager.registerEvents(JumpPadUseListener(this), this)
 
         getCommand("togglejumppad")?.setExecutor { sender, _, _, _ ->
-            if (sender is Player) {
+            if (sender is Player && sender.isOp) {
                 val isJumpPadMode = !playerJumpPadModeMap.getOrDefault(sender, false)
                 playerJumpPadModeMap[sender] = isJumpPadMode
 

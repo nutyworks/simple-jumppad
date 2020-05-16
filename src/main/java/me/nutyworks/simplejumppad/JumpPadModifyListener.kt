@@ -24,6 +24,8 @@ class JumpPadModifyListener(private val plugin: SimpleJumpPadPlugin) : Listener 
 
         if (e.hand == EquipmentSlot.OFF_HAND) return
 
+        if (!e.player.isOp) return
+
         JumpPadEditGUI(loc).open(e.player)
 
         e.isCancelled = true
